@@ -27,7 +27,7 @@ namespace Project
 
             if (option != "odd" && option != "prime")
             {
-                Console.WriteLine("option - 'odd' or 'prime' (the type of numbers to be generated)");
+                Console.WriteLine("Error: choose odd or prime");
                 return;
 
             }
@@ -39,11 +39,24 @@ namespace Project
             }
 
             Console.WriteLine("BitLength: " + bits + " bits");
+            Console.WriteLine(generateRandomBigInt(bits));
 
         }
 
-         public void generatingFactors(){}
+        static BigInteger generateRandomBigInt(int bits)
+        { 
+            int bytes = bits / 8; // 8 bits is 1 byte
+            byte [] randomBytes = new byte [bytes];
+            RandomNumberGenerator random = RandomNumberGenerator.Create();
+            random.GetBytes(randomBytes);
+            BigInteger randomBigInt =  new BigInteger(randomBytes);
+            randomBigInt = BigInteger.Abs(randomBigInt);
+            random.Dispose();
+            return randomBigInt;
+        }
 
-         public void checkingPrime(){}
+        static void generatingFactors(){}
+
+        static void checkingPrime(){}
     }
 }
