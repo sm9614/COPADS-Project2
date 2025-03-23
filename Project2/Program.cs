@@ -75,13 +75,12 @@ namespace Project
 
     public static class Generate
     {
-        public static readonly RandomNumberGenerator rand = RandomNumberGenerator.Create();
 
-        // This functions takes in the number of bits given by a user and then produces a random BigInteger
         public static BigInteger GenerateRandomBigInt(int bits)
         {
             int bytes = bits / 8; // 8 bits is 1 byte
             byte[] randomBytes = new byte[bytes];
+            RandomNumberGenerator rand = RandomNumberGenerator.Create();
             lock (rand)
             {
                 rand.GetBytes(randomBytes);
@@ -91,7 +90,6 @@ namespace Project
             return randomBigInt;
         }
 
-        // Find the number of factors of a given BigInteger  
         public static int GenerateFactors(BigInteger bigInt)
         {
             int factors = 0;
@@ -112,7 +110,6 @@ namespace Project
             return factors;
         }
 
-        // Generates prime BigIntegers of a given size of bits
         public static BigInteger GeneratePrime(int bits, int k = 10)
         {
             int available = Environment.ProcessorCount;
@@ -146,13 +143,14 @@ namespace Project
 
     public static class BigIntExtension
     {
-        // Uses binary search to estimate the sqrt of a BigInteger
+
         public static BigInteger Sqrt(BigInteger bigInt)
         {
             BigInteger low = 0;
             BigInteger high = bigInt;
             BigInteger mid;
 
+            // BInary search is used to find a number from 0 to n such that the number^2 is the given bigint 
             while (low <= high)
             {
                 mid = (low + high) / 2;
@@ -173,7 +171,6 @@ namespace Project
             return high;
         }
 
-        // The Miller-Rabin Primality test to determine whether a BigInteger is prime or not
         public static Boolean IsProbablyPrime(this BigInteger value, int k = 10)
         {
             int s = 0;
@@ -184,7 +181,7 @@ namespace Project
                 s++;
             }
             using var rand = RandomNumberGenerator.Create();
-            byte[] bytes = new byte [value.ToByteArray().Length];
+            byte[] bytes = new byte[value.ToByteArray().Length];
 
             for (int i = 0; i < k; i++)
             {
@@ -201,8 +198,9 @@ namespace Project
                         break;
                     }
                 }
+
                 BigInteger x = BigInteger.ModPow(a, d, value);
-                if (x == 1 || x == value -1 ) continue;
+                if (x == 1 || x == value - 1) continue;
                 for (int j = 1; j < s; j++)
                 {
                     BigInteger y = BigInteger.ModPow(x, 2, value);
@@ -224,5 +222,3 @@ namespace Project
         }
     }
 }
-
-        
